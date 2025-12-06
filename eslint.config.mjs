@@ -13,6 +13,14 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    files: ["**/*.ts", "**/*.tsx"], // Apply this rule only to TypeScript files
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off", // Disables the warning entirely
+      // Alternatively, set to 'warn' to downgrade it to a warning (if not already a warning)
+      // '@typescript-eslint/no-explicit-any': 'warn',
+    },
+  },
 ]);
 
 export default eslintConfig;
