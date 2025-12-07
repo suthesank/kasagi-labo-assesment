@@ -152,14 +152,14 @@ export default function AnimeDetailsPage({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* COVER IMAGE */}
         {anime.image && (
-          <Card className="overflow-hidden rounded-2xl shadow-md relative aspect-[225/319]">
+          <Card className="overflow-hidden rounded-2xl shadow-md relative aspect-225/319">
             <Image src={anime.image} alt={anime.title} layout="fill" />
           </Card>
         )}
 
         {/* INFO */}
         <div className="md:col-span-2 flex flex-col gap-4">
-          <div className="flex justify-between items-center gap-4">
+          <div className="flex justify-between items-start gap-4">
             <h1 className="text-3xl font-bold">{anime.title}</h1>
 
             <Button
@@ -238,10 +238,10 @@ export default function AnimeDetailsPage({
               <a
                 key={rec.entry.mal_id}
                 href={`/${rec.entry.mal_id}`}
-                className="min-w-[180px]"
+                className="w-[200px]"
               >
-                <div className="rounded-xl overflow-hidden shadow hover:scale-[1.02] transition-transform bg-card border h-full">
-                  <div className="w-full relative aspect-225/300">
+                <div className="rounded-xl overflow-hidden shadow hover:scale-[1.02] transition-transform bg-card border h-full w-[200px]">
+                  <div className="w-full h-auto relative aspect-225/319">
                     <Image
                       src={rec.entry.images.jpg.image_url}
                       alt={rec.entry.title}

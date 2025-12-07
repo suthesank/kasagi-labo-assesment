@@ -64,15 +64,11 @@ export const AnimeCard = ({ anime }: Props) => {
 
 export const AnimeCardSkeleton = () => {
   return (
-    <Card className="rounded-xl overflow-hidden shadow-sm border animate-pulse min-w-[220px]">
-      <CardHeader className="p-0">
-        <Skeleton className="w-full h-56" />
-      </CardHeader>
-
-      <CardContent className="p-4 space-y-3">
-        <Skeleton className="h-4 w-3/4" />
-        <Skeleton className="h-3 w-1/2" />
-        <Skeleton className="h-9 w-24 mt-2" />
+    <Card className="rounded-xl overflow-hidden shadow-sm border animate-pulse aspect-225/319 w-full">
+      <CardContent className="p-4 space-y-3 h-full w-full">
+        <Skeleton className="h-[70%] w-full" />
+        <Skeleton className="h-[10%] w-1/2" />
+        <Skeleton className="h-[10%] w-24 mt-2" />
       </CardContent>
     </Card>
   );
