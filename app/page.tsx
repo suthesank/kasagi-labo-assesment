@@ -25,10 +25,10 @@ function LoadMoreButton({
     return hasMore ? (
       <div className="w-full flex justify-center my-6">
         <Button
-          variant="outline"
+          variant="default"
           onClick={() => fetchMoreAnime()}
           disabled={isLoading}
-          className="cursor-pointer"
+          className="cursor-pointer font-semibold hover:scale-105 transition"
         >
           {isLoading ? "Loading..." : "Load More"}
         </Button>
@@ -58,9 +58,9 @@ export default function Home() {
   }, [error]);
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-start bg-zinc-50 font-sans dark:bg-black">
+    <div className="flex flex-col items-center justify-start font-sans dark:bg-black">
       {isLoading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4 p-4 w-fit">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4 w-fit">
           {Array.from({ length: 24 }).map((_, i) => (
             <AnimeCardSkeleton key={i} />
           ))}
@@ -90,15 +90,20 @@ export default function Home() {
             <>
               {allAnime && allAnime.length > 0 ? (
                 <>
-                  <div className="my-6 text-center">
-                    <h1 className="text-2xl font-bold">
-                      Explore the Anime Universe
+                  <div className="mt-20 mb-10 lg:mb-14 text-center">
+                    <h1 className="text-4xl md:text-5xl lg:text-7xl font-stretch-extra-expanded font-extrabold leading-none uppercase">
+                      <span className="text-black">Explore the</span>
+                      <br />
+                      <span className="text-[#d22027]">Anime Universe</span>
                     </h1>
-                    <h2 className="font-semibold text-muted-foreground">
-                      Discover stories crafted to captivate your imagination.
+                    <h2 className="lg:text-xl mt-5 lg:mt-10 max-w-xl lg:max-w-2xl mx-4">
+                      Discover stories crafted to captivate your imagination,
+                      unleash legendary adventures, awaken forgotten powers, and
+                      draw you into a universe where every episode fuels your
+                      next obsession.
                     </h2>
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4 p-4 w-fit">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4 w-fit">
                     {allAnime.map((anime) => (
                       <AnimeCard key={anime.id} anime={anime} />
                     ))}

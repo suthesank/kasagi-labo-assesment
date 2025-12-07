@@ -3,6 +3,7 @@ import { AnimeRecord } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 import { Heart, Star } from "lucide-react";
+import Image from "next/image";
 
 interface Props {
   anime: AnimeRecord;
@@ -13,14 +14,12 @@ export const AnimeCard = ({ anime }: Props) => {
 
   return (
     <a key={anime.id} href={`/${anime.id}`}>
-      <Card className="rounded-xl overflow-hidden shadow-sm transition-transform duration-200 hover:scale-[1.03] cursor-pointer border max-w-[220px] min-w-[165px] lg:min-w-[220px] h-full">
+      <Card className="rounded-xl overflow-hidden shadow-sm transition-transform duration-200 hover:scale-[1.03] cursor-pointer border  h-full">
         <CardHeader className="p-0">
           {anime.image ? (
-            <img
-              src={anime.image}
-              alt={anime.title}
-              className="w-full h-72 object-fill"
-            />
+            <div className="aspect-225/319 w-full h-full relative">
+              <Image src={anime.image} alt={anime.title} layout="fill" />
+            </div>
           ) : (
             <div className="w-full h-56 bg-gray-200 flex items-center justify-center text-gray-500">
               No Image

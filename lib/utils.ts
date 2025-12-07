@@ -6,6 +6,21 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const fetchWithRetry = async (
+  fn: () => Promise<any>,
+  attempt = 1
+): Promise<any> => {
+  try {
+    return await fn();
+  } catch (err) {
+    if (attempt < 3) {
+      await new Promise((r) => setTimeout(r, 1000));
+      return fetchWithRetry(fn, attempt + 1);
+    }
+    throw err;
+  }
+};
+
 export const buildAnimeQueryParams = (
   selectedGenre?: Genre[],
   currentPage?: number

@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { AnimeRecord, Genre } from "../types";
+import { fetchWithRetry } from "../utils";
 
 interface Pagination {
   current_page: number;
@@ -21,24 +22,6 @@ export function useAnimeFetcher(
   const [paginationData, setPaginationData] = useState<Pagination | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // -------------------------------------------------
-  // ⭐ Universal Retry Wrapper
-  // -------------------------------------------------
-  const fetchWithRetry = useCallback(
-    async (fn: () => Promise<any>, attempt = 1): Promise<any> => {
-      try {
-        return await fn();
-      } catch (err) {
-        if (attempt < 3) {
-          await new Promise((r) => setTimeout(r, 1000));
-          return fetchWithRetry(fn, attempt + 1);
-        }
-        throw err;
-      }
-    },
-    []
-  );
 
   // -------------------------------------------------
   // ⭐ Helper: map API response to AnimeRecord[]
@@ -64,7 +47,6 @@ export function useAnimeFetcher(
     setError(null);
 
     try {
-      console.log("Fetching initial anime with params:", queryParams);
       const res = await fetchWithRetry(() => fetchAnimes(queryParams));
 
       if (!cancelled && res.ok && res.data) {
@@ -109,7 +91,6 @@ export function useAnimeFetcher(
     setError(null);
 
     try {
-      console.log("Fetching more anime with params:", queryParams);
       const res = await fetchWithRetry(() => fetchAnimes(queryParams));
 
       if (!cancelled && res.ok && res.data) {
@@ -158,15 +139,14 @@ export function useAnimeFetcher(
   // -------------------------------------------------
   // 🔥 Handler to trigger fetching more anime
   // -------------------------------------------------
-  const handleFetchMoreAnime = () => {
-    console.log("Handle fetch more anime triggered");
+  const handleFetchMoreAnime = useCallback(() => {
     setPaginationData((prev) => {
       if (prev) {
         return { ...prev, current_page: prev.current_page + 1 };
       }
       return prev;
     });
-  };
+  }, []);
 
   // -------------------------------------------------
   // 🎉 Return API

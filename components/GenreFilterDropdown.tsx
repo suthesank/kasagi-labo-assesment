@@ -53,7 +53,10 @@ export function GenreFilterDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Filter className="hover:scale-105 cursor-pointer transition" />
+        <Filter
+          className="hover:scale-105 cursor-pointer transition"
+          color="black"
+        />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-56 p-2">

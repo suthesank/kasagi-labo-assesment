@@ -1,5 +1,6 @@
 import { useAnime } from "@/app/context/AnimeContext";
 import { Star } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 
@@ -40,7 +41,7 @@ const FavAnimeModal = ({ open, onClose }: FavAnimeModalProps) => {
                 {a.image && (
                   <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg relative">
                     {/* TODO: Investigate why Image component throws error here */}
-                    <img src={a.image} alt={a.title} />
+                    <Image src={a.image} alt={a.title} layout="fill" />
                   </div>
                 )}
                 <div>

@@ -11,6 +11,7 @@ import { AnimeRecord } from "@/lib/types";
 import RecommendationSkeleton from "@/components/RecommendationSkeleton";
 import Link from "next/link";
 import Image from "next/image";
+import { fetchWithRetry } from "@/lib/utils";
 
 export default function AnimeDetailsPage({
   params,
@@ -32,57 +33,82 @@ export default function AnimeDetailsPage({
   const isFav = favAnime.some((a) => a.id.toString() === slug);
 
   useEffect(() => {
-    console.log("Fav Anime Updated", favAnime);
-  }, [favAnime]);
+    let isCancelled = false;
 
-  useEffect(() => {
-    async function fetchAnime() {
+    const fetchAnime = async () => {
+      setLoading(true);
+
       try {
-        const res = await fetch(`https://api.jikan.moe/v4/anime/${slug}`);
-        const json = await res.json();
-        setAnime({
-          id: json.data.mal_id,
-          title: json.data.title,
-          image: json.data.images?.jpg?.image_url,
-          score: json.data.score,
-          genres: json.data.genres?.map((g: { name: string }) => g.name) || [],
-          synopsis: json.data.synopsis,
-          status: json.data.status,
-          episodes: json.data.episodes,
-          duration: json.data.duration,
-          studios:
-            json.data.studios?.map((s: { name: string }) => s.name) || [],
-        });
+        const json = await fetchWithRetry(() =>
+          fetch(`https://api.jikan.moe/v4/anime/${slug}`).then((r) => {
+            if (!r.ok) throw new Error("Failed");
+            return r.json();
+          })
+        );
+
+        if (!isCancelled) {
+          setAnime({
+            id: json.data.mal_id,
+            title: json.data.title,
+            image: json.data.images?.jpg?.image_url,
+            score: json.data.score,
+            genres:
+              json.data.genres?.map((g: { name: string }) => g.name) || [],
+            synopsis: json.data.synopsis,
+            status: json.data.status,
+            episodes: json.data.episodes,
+            duration: json.data.duration,
+            studios:
+              json.data.studios?.map((s: { name: string }) => s.name) || [],
+          });
+        }
       } catch (err) {
         console.error("Error fetching anime:", err);
       }
-      setLoading(false);
 
-      // small delay so the fade-in looks clean
-      setTimeout(() => setReady(true), 50);
-    }
+      if (!isCancelled) {
+        setLoading(false);
+        setTimeout(() => setReady(true), 50);
+      }
+    };
 
-    async function fetchRecommendations() {
+    const fetchRecommendations = async () => {
+      setLoadingRecs(true);
+
       try {
-        const res = await fetch(
-          `https://api.jikan.moe/v4/anime/${slug}/recommendations`
+        const json = await fetchWithRetry(() =>
+          fetch(`https://api.jikan.moe/v4/anime/${slug}/recommendations`).then(
+            (r) => {
+              if (!r.ok) throw new Error("Failed");
+              return r.json();
+            }
+          )
         );
-        const json = await res.json();
-        setRecommendations(json.data || []);
+
+        if (!isCancelled) {
+          setRecommendations(json.data || []);
+        }
       } catch (err) {
         console.error("Error fetching recommendations:", err);
       }
-      setLoadingRecs(false);
-    }
+
+      if (!isCancelled) {
+        setLoadingRecs(false);
+      }
+    };
 
     fetchAnime();
     fetchRecommendations();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [slug]);
 
   if (loading) return <AnimeDetailsSkeleton />;
   if (!anime)
     return (
-      <div className="flex flex-col items-center justify-center py-20 px-4 text-center space-y-6">
+      <div className="flex flex-col items-center justify-start py-20 px-4 text-center space-y-6">
         <div className="w-64 h-full aspect-video rounded-xl overflow-hidden shadow-lg relative">
           <Image
             src="/images/not-found.webp"
@@ -109,7 +135,7 @@ export default function AnimeDetailsPage({
   return (
     <div
       className={`
-        max-w-5xl mx-auto p-6 
+        max-w-7xl mx-auto p-6 
         transition-all duration-500
         ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}
       `}
@@ -125,13 +151,11 @@ export default function AnimeDetailsPage({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* COVER IMAGE */}
-        <Card className="overflow-hidden rounded-2xl shadow-md">
-          <img
-            src={anime.image}
-            alt={anime.title}
-            className="w-full h-full object-cover"
-          />
-        </Card>
+        {anime.image && (
+          <Card className="overflow-hidden rounded-2xl shadow-md relative aspect-[225/319]">
+            <Image src={anime.image} alt={anime.title} layout="fill" />
+          </Card>
+        )}
 
         {/* INFO */}
         <div className="md:col-span-2 flex flex-col gap-4">
@@ -139,10 +163,10 @@ export default function AnimeDetailsPage({
             <h1 className="text-3xl font-bold">{anime.title}</h1>
 
             <Button
-              variant={isFav ? "default" : "outline"}
+              variant="default"
               size="icon"
               onClick={() => toggleFavAnime(anime)}
-              className="rounded-full cursor-pointer"
+              className="rounded-full cursor-pointer hover:scale-110 transition"
             >
               <Heart
                 className={`h-6 w-6 ${
@@ -155,14 +179,14 @@ export default function AnimeDetailsPage({
           {/* GENRES */}
           <div className="flex flex-wrap gap-2">
             {anime.genres?.map((genre) => (
-              <Badge key={genre} variant="secondary">
+              <Badge key={genre} variant="default">
                 {genre}
               </Badge>
             ))}
           </div>
 
-          <Card>
-            <CardContent className="p-4 space-y-4">
+          <Card className="shadow-none border-none h-full">
+            <CardContent className="p-4 space-y-4 flex flex-col justify-between h-full">
               {/* SYNOPSIS */}
               <div>
                 <h2 className="text-xl font-semibold mb-1">Synopsis</h2>
