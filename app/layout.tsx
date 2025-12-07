@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import { AnimeProvider } from "@/app/context/AnimeContext";
 import Header from "@/components/Header";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Outfit({
   variable: "--font-outfit-sans",
@@ -27,6 +28,7 @@ export default function RootLayout({
           <div className="max-w-[1600px] mx-auto w-full">
             <div className="mt-16 lg:mx-12">{children}</div>
           </div>
+          <Analytics />
         </body>
       </html>
     </AnimeProvider>
