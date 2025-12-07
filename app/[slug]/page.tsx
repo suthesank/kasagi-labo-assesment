@@ -233,7 +233,7 @@ export default function AnimeDetailsPage({
             No recommendations available.
           </p>
         ) : (
-          <div className="flex gap-4 overflow-x-auto pb-3">
+          <div className="flex gap-4 overflow-x-auto py-2">
             {recommendations.map((rec) => (
               <a
                 key={rec.entry.mal_id}
@@ -241,11 +241,13 @@ export default function AnimeDetailsPage({
                 className="min-w-[180px]"
               >
                 <div className="rounded-xl overflow-hidden shadow hover:scale-[1.02] transition-transform bg-card border h-full">
-                  <img
-                    src={rec.entry.images.jpg.image_url}
-                    alt={rec.entry.title}
-                    className="w-full h-48 object-cover"
-                  />
+                  <div className="w-full relative aspect-225/300">
+                    <Image
+                      src={rec.entry.images.jpg.image_url}
+                      alt={rec.entry.title}
+                      layout="fill"
+                    />
+                  </div>
 
                   <div className="p-3">
                     <p className="text-sm font-medium line-clamp-2">
