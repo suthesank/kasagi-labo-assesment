@@ -28,15 +28,6 @@ export const AnimeProvider = ({ children }: { children: ReactNode }) => {
   });
   const [selectedGenre, setSelectedGenre] = useState<Genre[]>([]);
 
-  // useEffect(() => {
-  //   const stored = sessionStorage.getItem("fav-animes");
-  //   if (stored) {
-  //     Promise.resolve().then(() => {
-  //       setFavAnime(JSON.parse(stored));
-  //     });
-  //   }
-  // }, []);
-
   const toggleFavAnime = (anime: AnimeRecord) => {
     setFavAnime((prev) => {
       const exists = prev.some((a) => a.id === anime.id);

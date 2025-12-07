@@ -137,26 +137,6 @@ export default function Home() {
                     Try adjusting your selection to summon new titles!
                   </p>
                 </div>
-
-                // <div className="w-full flex justify-center mt-10">
-                //   <CardContent className="flex flex-col items-center gap-4">
-                //     <SearchX className="w-12 h-12 text-muted-foreground" />
-
-                //     <h2 className="text-xl font-bold">
-                //       No Anime Detected in This Realm
-                //     </h2>
-
-                //     <p className="text-sm text-muted-foreground">
-                //       Your chosen genres forged a path too rare… No heroes, no
-                //       adventures, no battles were found.
-                //     </p>
-
-                //     <p className="text-sm font-medium flex items-center gap-1 text-primary mt-2">
-                //       <Sparkles className="w-4 h-4" />
-                //       Try adjusting your selection to summon new titles!
-                //     </p>
-                //   </CardContent>
-                // </div>
               )}
             </>
           )}

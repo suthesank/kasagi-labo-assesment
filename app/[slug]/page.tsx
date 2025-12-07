@@ -125,10 +125,6 @@ export default function AnimeDetailsPage({
           Try searching for another title—your next great adventure might be
           just a keyword away!
         </p>
-
-        {/* <p className="max-w-md text-muted-foreground text-sm leading-relaxed">
-          Try adjusting your selection to summon new titles!
-        </p> */}
       </div>
     );
 
@@ -206,19 +202,6 @@ export default function AnimeDetailsPage({
                   value={anime.studios?.map((studio) => studio).join(", ")}
                 />
               </div>
-
-              {/* TRAILER */}
-              {/* {anime.trailer?.embed_url && (
-                <div>
-                  <h2 className="text-xl font-semibold mb-2">Trailer</h2>
-                  <iframe
-                    className="w-full aspect-video rounded-xl"
-                    src={anime.trailer.embed_url}
-                    allow="autoplay; encrypted-media"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              )} */}
             </CardContent>
           </Card>
         </div>
