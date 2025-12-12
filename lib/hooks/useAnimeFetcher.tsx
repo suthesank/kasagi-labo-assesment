@@ -65,13 +65,7 @@ export function useAnimeFetcher(
     return () => {
       cancelled = true;
     };
-  }, [
-    selectedGenre,
-    fetchAnimes,
-    fetchWithRetry,
-    mapAnime,
-    buildAnimeQueryParams,
-  ]);
+  }, [selectedGenre, fetchAnimes, mapAnime, buildAnimeQueryParams]);
 
   // -------------------------------------------------
   // ⭐ Fetch more anime (runs on page change)
@@ -120,7 +114,6 @@ export function useAnimeFetcher(
     selectedGenre,
     fetchAnimes,
     mapAnime,
-    fetchWithRetry,
     buildAnimeQueryParams,
     paginationData?.current_page,
   ]);

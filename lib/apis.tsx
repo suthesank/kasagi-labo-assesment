@@ -29,3 +29,31 @@ export const fetchAnimes = async (queryParams?: string) => {
     };
   }
 };
+
+export const fetchGenres = async () => {
+  try {
+    const res = await fetch("https://api.jikan.moe/v4/genres/anime");
+
+    if (!res.ok) {
+      return {
+        ok: false,
+        error: `Request failed with status ${res.status}`,
+        data: null,
+      };
+    }
+
+    const jsonData = await res.json();
+
+    return {
+      ok: true,
+      data: jsonData.data,
+      error: null,
+    };
+  } catch (err: any) {
+    return {
+      ok: false,
+      error: err.message || "Unknown error",
+      data: null,
+    };
+  }
+};

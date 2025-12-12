@@ -13,6 +13,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAnime } from "@/app/context/AnimeContext";
 import { Genre } from "@/lib/types";
 import { Filter } from "lucide-react";
+import { fetchWithRetry } from "@/lib/utils";
+import { fetchGenres } from "@/lib/apis";
 
 export function GenreFilterDropdown() {
   const { selectedGenre, toggleSelectedGenre } = useAnime();
@@ -23,21 +25,15 @@ export function GenreFilterDropdown() {
   // Fetch available genres
   useEffect(() => {
     let isMounted = true;
-    async function fetchGenresWithRetry(attempt = 1) {
+    async function fetchGenresWithRetry() {
       try {
-        const res = await fetch("https://api.jikan.moe/v4/genres/anime");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
-        if (isMounted) setGenres(data.data);
-      } catch (err) {
-        console.error(`Fetch failed (attempt ${attempt})`, err);
-        if (attempt < 3) {
-          setTimeout(() => {
-            fetchGenresWithRetry(attempt + 1);
-          }, 1000);
-        } else {
-          console.error("Max retry attempts reached");
+        const res = await fetchWithRetry(fetchGenres);
+        if (!res.ok) throw new Error(res.error || "Failed to fetch genres");
+        if (isMounted && res.ok && res.data) {
+          setGenres(res.data);
         }
+      } catch (err) {
+        console.error(err);
       } finally {
         if (isMounted) setLoading(false);
       }
